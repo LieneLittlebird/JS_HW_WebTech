@@ -12,7 +12,7 @@ window.addEventListener('DOMContentLoaded', (event) => { // execute the code whe
 	for (let i in data) { // for every item in the data - every piece of statistic info
 		let continent = data[i].continent; // read continent from data
 		let country = data[i].country; // read country from data
-		if (continent && !(continent in lookup)) { // if the continet hasn't been previously processed (is not present in lookup)
+		if (continent && !(continent in lookup)) { // if the continent hasn't been previously processed (is not present in lookup)
 			lookup[continent] = {}; // add a new continent to the lookup
 		}
 		lookup[continent][country] = 1; // add a country to the lookup. lookup is a two-dimensional associative array/object
