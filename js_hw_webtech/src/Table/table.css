@@ -3,6 +3,7 @@ td,
 th {
   border: 1px solid gray;
   border-collapse: collapse;
+  padding: 5px;
 }
 td:nth-child(5),
 td:nth-child(6),
