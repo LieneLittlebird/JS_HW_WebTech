@@ -1,22 +1,21 @@
-<!DOCTYPE html>
-<!--
-Liene Putniņa, lr12022
--->
-<html>
-  <head>
-    <title>COVID-19 Statistics</title>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="table.css" />
-    <link rel="stylesheet" href="form.css" />
-  </head>
-  <body>
-    <h1>COVID-19 Statistics</h1>
+import React from "react";
+
+import "./form.css";
+
+import data from "./../data.js";
+
+const Form = ({ setFilteredData }) => {
+  // habdle button cliks
+  // setFilteredData(data.filter.magic)
+
+  return (
     <div id="form">
       <div class="form-element">
         <label for="continent-select">Continent:</label>
         <select id="continent-select">
-          <option value="All" selected>All</option>
+          <option value="All" selected>
+            All
+          </option>
         </select>
       </div>
       <div class="form-element">
@@ -53,14 +52,7 @@ Liene Putniņa, lr12022
         <button id="show-list">Show list</button>
       </div>
     </div>
-    <table>
-      <tr>
-        <th>Country</th>
-        <th>Population</th>
-        <th>Week</th>
-        <th id="indicator">Cases weekly</th>
-        <th id="indicator_cumulative">Cumulative count</th>
-      </tr>
-    </table>
-  </body>
-</html>
+  );
+};
+
+export default Form;
