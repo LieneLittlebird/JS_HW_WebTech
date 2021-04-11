@@ -22,6 +22,46 @@ const countryOptions = data
   .filter((v, i, x) => x.indexOf(v) === i);
 
 const CovidForm = () => {
+  const [continent, setContinent] = useState("");
+  const chooseContinent = (event) => {
+    setContinent(event.target.value);
+  };
+
+  const [country, setCountry] = useState("");
+  const chooseCountry = (event) => {
+    setCountry(event.target.value);
+  };
+
+  const [yearFrom, setYearFrom] = useState("");
+  const chooseYearFrom = (event) => {
+    setCountry(event.target.value);
+  };
+
+  const [yearTill, setYearTill] = useState("");
+  const chooseYearTill = (event) => {
+    setCountry(event.target.value);
+  };
+
+  const [weekFrom, setWeekFrom] = useState("");
+  const chooseWeekFrom = (event) => {
+    setCountry(event.target.value);
+  };
+
+  const [weekTill, setWeekTill] = useState("");
+  const chooseWeekTill = (event) => {
+    setCountry(event.target.value);
+  };
+
+  const [radioState, setRadioState] = useState("");
+  const handleRadioButton = (event) => {
+    setRadioState(event.target.value);
+  };
+
+  const [countrySearch, setCountrySearch] = useState("");
+  const searchByCountry = (event) => {
+    setCountry(event.target.value);
+  };
+
   const showList = () => {
     /* 
     1. Grab all the fields (event.target.value?)
@@ -32,9 +72,13 @@ const CovidForm = () => {
 
   return (
     <div id="form">
-      <div className="form-element">
+      <div className="form-element" id="continent">
         <label htmlFor="continent-select">Continent:</label>
-        <select id="continent-select" defaultValue="selected">
+        <select
+          id="continent-select"
+          value={continent}
+          onChange={chooseContinent}
+        >
           <option value="All">All</option>
           {continentOptions.map((continentOption) => (
             <option key={continentOption} value={continentOption}>
@@ -43,9 +87,9 @@ const CovidForm = () => {
           ))}
         </select>
       </div>
-      <div className="form-element">
+      <div className="form-element" id="country">
         <label htmlFor="country-select">Country:</label>
-        <select id="country-select">
+        <select id="country-select" value={country} onChange={chooseCountry}>
           <option value="All">All</option>
           {countryOptions.map((countryOption) => (
             <option key={countryOption} value={countryOption}>
@@ -54,31 +98,73 @@ const CovidForm = () => {
           ))}
         </select>
       </div>
-      <div className="form-element">
+      <div className="form-element" id="year-from">
         <label htmlFor="year-from">Year from:</label>
-        <input type="text" id="year-from" placeholder="YYYY" />
+        <input
+          type="text"
+          id="year-from"
+          placeholder="YYYY"
+          value={yearFrom}
+          onChange={chooseYearFrom}
+        />
       </div>
-      <div className="form-element">
-        <label htmlFor="week-from">Week from:</label>
-        <input type="text" id="week-from" placeholder="Week number" />
-      </div>
-      <div className="form-element">
+      <div className="form-element" id="year-till">
         <label htmlFor="year-till">Year till:</label>
-        <input type="text" id="year-till" placeholder="YYYY" />
+        <input
+          type="text"
+          id="year-till"
+          placeholder="YYYY"
+          value={yearTill}
+          onChange={chooseYearTill}
+        />
       </div>
-      <div className="form-element">
+      <div className="form-element" id="week-from">
+        <label htmlFor="week-from">Week from:</label>
+        <input
+          type="text"
+          id="week-from"
+          placeholder="Week number"
+          value={weekFrom}
+          onChange={chooseWeekFrom}
+        />
+      </div>
+      <div className="form-element" id="week-till">
         <label htmlFor="week-till">Week till:</label>
-        <input type="text" id="week-till" placeholder="Week number" />
+        <input
+          type="text"
+          id="week-till"
+          placeholder="Week number"
+          value={weekTill}
+          onChange={chooseWeekTill}
+        />
       </div>
-      <div className="form-element">
+      <div className="form-element" id="cases-deaths">
         <label htmlFor="cases">Cases</label>
-        <input type="radio" id="cases" name="indicator" value="cases" checked />
+        <input
+          type="radio"
+          id="cases"
+          name="indicator"
+          value={radioState}
+          onChange={handleRadioButton}
+          checked
+        />
         <label htmlFor="deaths">Deaths</label>
-        <input type="radio" id="deaths" name="indicator" value="deaths" />
+        <input
+          type="radio"
+          id="deaths"
+          name="indicator"
+          value={radioState}
+          onChange={handleRadioButton}
+        />
       </div>
-      <div className="form-element">
+      <div className="form-element" id="country-search">
         <label htmlFor="search">Country search:</label>
-        <input type="search" id="search" />
+        <input
+          type="search"
+          id="search"
+          value={countrySearch}
+          onChange={searchByCountry}
+        />
       </div>
       <button id="show-list" type="submit" className="form-element">
         Show list
