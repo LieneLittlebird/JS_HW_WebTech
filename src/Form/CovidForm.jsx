@@ -33,25 +33,35 @@ const CovidForm = ({
   const processData = () => {
     let filteredData = originalData;
 
-    // Country
     if (country !== "All") {
       filteredData = filteredData.filter((item) => item.country === country);
     }
 
-    // Year from
     if (yearFrom) {
       filteredData = filteredData.filter(
         (item) => item.year_week.slice(0, 4) >= yearFrom
       );
     }
 
-    // year till
+    // year till check the >= condition
+    if (yearTill) {
+      filteredData = filteredData.filter(
+        (item) => item.year_week.slice(0, 4) >= yearTill
+      );
+    }
+    // week from - check the >= condition
+    if (weekFrom) {
+      filteredData = filteredData.filter(
+        (item) => item.year_week.slice(-1) >= weekFrom
+      );
+    }
+    // week till check the >= condition
+    if (weekTill) {
+      filteredData = filteredData.filter(
+        (item) => item.year_week.slice(-1) >= weekTill
+      );
+    }
 
-    // week from
-
-    // week till
-
-    // cases or deaths
     setCasesOrDeaths(indicator);
     filteredData = filteredData.filter(
       (item) => item.indicator === indicator.toLowerCase()

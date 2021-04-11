@@ -23,7 +23,7 @@ const Table = ({ data, casesOrDeaths }) => (
           weekly_count,
           cumulative_count,
         } = object;
-        const week = year_week.slice(-2);
+        const week = year_week.slice(-1);
 
         return (
           <tr key={`row_${country + year_week + index}`}>
