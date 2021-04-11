@@ -1,22 +1,41 @@
+/* eslint-disable camelcase */
+/* eslint-disable react/prop-types */
 import React from "react";
 import "./table.css";
 
-const Table = () => (
+const Table = ({ data, casesOrDeaths }) => (
   <table>
-    <tr>
-      <th>Country</th>
-      <th>Population</th>
-      <th>Week</th>
-      <th id="indicator">Cases weekly</th>
-      <th id="indicator_cumulative">Cumulative count</th>
-    </tr>
-    {/* <!-- filteredData.map(data => <tr>
-        <td>{data.continent}</td>
-        <td>{data.country}</td>
-        <td>{data.continent}</td>
-        <td>{data.continent}</td>
-        <td>{data.continent}</td>
-      </tr>) --> */}
+    <thead>
+      <tr>
+        <th>Country</th>
+        <th>Population</th>
+        <th>Week</th>
+        <th>{casesOrDeaths === "Cases" ? "Cases weekly" : "Deaths weekly"}</th>
+        <th>Cumulative count</th>
+      </tr>
+    </thead>
+    <tbody>
+      {data.map((object, index) => {
+        const {
+          country,
+          population,
+          year_week,
+          weekly_count,
+          cumulative_count,
+        } = object;
+        const week = year_week.slice(-2);
+
+        return (
+          <tr key={`row_${country + year_week + index}`}>
+            <td>{country}</td>
+            <td>{population}</td>
+            <td>{week}</td>
+            <td>{weekly_count}</td>
+            <td>{cumulative_count}</td>
+          </tr>
+        );
+      })}
+    </tbody>
   </table>
 );
 

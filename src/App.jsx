@@ -3,25 +3,34 @@
 /* eslint-disable no-unused-vars */
 
 import "./App.css";
-import data from "./data.js";
+import { useState } from "react";
+import originalData from "./data.js";
 import CovidForm from "./Form/CovidForm";
 import Table from "./Table/Table";
 
-const App = () => (
-  <>
-    <h1>COVID-19 Statistics</h1>
-    <div className="App">
-      <CovidForm />
-      <Table />
+const App = () => {
+  const [filteredData, setFilteredData] = useState(originalData);
+  const [casesOrDeaths, setCasesOrDeaths] = useState("Cases");
+
+  return (
+    <div id="app-components">
+      <h1>COVID-19 Statistics</h1>
+      <div className="App">
+        <CovidForm
+          originalData={originalData}
+          setData={setFilteredData}
+          casesOrDeaths={casesOrDeaths}
+          setCasesOrDeaths={setCasesOrDeaths}
+        />
+        <Table data={filteredData} casesOrDeaths={casesOrDeaths} />
+      </div>
     </div>
-  </>
-);
+  );
+};
 
 export default App;
 
 /*
-import { useState } from "react";
-  const [filteredData, setFilteredData] = useState(null);
 setFilteredData={setFilteredData} 
  filteredData={filteredData} 
 */

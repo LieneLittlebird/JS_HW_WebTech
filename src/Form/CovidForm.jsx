@@ -11,73 +11,73 @@ import { useState } from "react";
 
 import "./form.css";
 
-import data from "../data.js";
-
-const continentOptions = data
-  .map((x) => x.continent)
-  .filter((v, i, x) => x.indexOf(v) === i);
-
-const countryOptions = data
-  .map((x) => x.country)
-  .filter((v, i, x) => x.indexOf(v) === i);
-
-const CovidForm = () => {
-  const [continent, setContinent] = useState("");
-  const chooseContinent = (event) => {
-    setContinent(event.target.value);
-  };
-
-  const [country, setCountry] = useState("");
-  const chooseCountry = (event) => {
-    setCountry(event.target.value);
-  };
-
+const CovidForm = ({
+  originalData,
+  setData,
+  casesOrDeaths,
+  setCasesOrDeaths,
+}) => {
+  const [continent, setContinent] = useState("All");
+  const [country, setCountry] = useState("All");
   const [yearFrom, setYearFrom] = useState("");
-  const chooseYearFrom = (event) => {
-    setCountry(event.target.value);
-  };
-
   const [yearTill, setYearTill] = useState("");
-  const chooseYearTill = (event) => {
-    setCountry(event.target.value);
-  };
-
   const [weekFrom, setWeekFrom] = useState("");
-  const chooseWeekFrom = (event) => {
-    setCountry(event.target.value);
-  };
-
   const [weekTill, setWeekTill] = useState("");
-  const chooseWeekTill = (event) => {
-    setCountry(event.target.value);
-  };
-
-  const [radioState, setRadioState] = useState("");
-  const handleRadioButton = (event) => {
-    setRadioState(event.target.value);
-  };
+  const [indicator, setIndicator] = useState(casesOrDeaths);
 
   const [countrySearch, setCountrySearch] = useState("");
   const searchByCountry = (event) => {
-    setCountry(event.target.value);
+    setCountrySearch(event.target.value);
   };
 
-  const showList = () => {
-    /* 
-    1. Grab all the fields (event.target.value?)
-    2. Check what's chosen
-    3. Post the results as tr 
-    3.1. Change cases weekly to deaths weekly and vice versa */
+  const processData = () => {
+    let filteredData = originalData;
+
+    // Country
+    if (country !== "All") {
+      filteredData = filteredData.filter((item) => item.country === country);
+    }
+
+    // Year from
+    if (yearFrom) {
+      filteredData = filteredData.filter(
+        (item) => item.year_week.slice(0, 4) >= yearFrom
+      );
+    }
+
+    // year till
+
+    // week from
+
+    // week till
+
+    // cases or deaths
+    setCasesOrDeaths(indicator);
+    filteredData = filteredData.filter(
+      (item) => item.indicator === indicator.toLowerCase()
+    );
+
+    setData(filteredData);
   };
+
+  const continentOptions = originalData
+    .map((x) => x.continent)
+    .filter((v, i, x) => x.indexOf(v) === i);
+
+  const countryOptions = originalData
+    .map((x) => x.country)
+    .filter((v, i, x) => x.indexOf(v) === i);
 
   return (
-    <div id="form">
+    <form id="form">
       <div className="form-element" id="continent">
         <label htmlFor="continent-select">Continent:</label>
         <select
           id="continent-select"
           value={continent}
-          onChange={chooseContinent}
+          onChange={(event) => {
+            setContinent(event.target.value);
+          }}
         >
           <option value="All">All</option>
           {continentOptions.map((continentOption) => (
@@ -89,7 +89,13 @@ const CovidForm = () => {
       </div>
       <div className="form-element" id="country">
         <label htmlFor="country-select">Country:</label>
-        <select id="country-select" value={country} onChange={chooseCountry}>
+        <select
+          id="country-select"
+          value={country}
+          onChange={(event) => {
+            setCountry(event.target.value);
+          }}
+        >
           <option value="All">All</option>
           {countryOptions.map((countryOption) => (
             <option key={countryOption} value={countryOption}>
@@ -105,7 +111,9 @@ const CovidForm = () => {
           id="year-from"
           placeholder="YYYY"
           value={yearFrom}
-          onChange={chooseYearFrom}
+          onChange={(event) => {
+            setYearFrom(event.target.value);
+          }}
         />
       </div>
       <div className="form-element" id="year-till">
@@ -115,7 +123,9 @@ const CovidForm = () => {
           id="year-till"
           placeholder="YYYY"
           value={yearTill}
-          onChange={chooseYearTill}
+          onChange={(event) => {
+            setYearTill(event.target.value);
+          }}
         />
       </div>
       <div className="form-element" id="week-from">
@@ -125,7 +135,9 @@ const CovidForm = () => {
           id="week-from"
           placeholder="Week number"
           value={weekFrom}
-          onChange={chooseWeekFrom}
+          onChange={(event) => {
+            setWeekFrom(event.target.value);
+          }}
         />
       </div>
       <div className="form-element" id="week-till">
@@ -135,7 +147,9 @@ const CovidForm = () => {
           id="week-till"
           placeholder="Week number"
           value={weekTill}
-          onChange={chooseWeekTill}
+          onChange={(event) => {
+            setWeekTill(event.target.value);
+          }}
         />
       </div>
       <div className="form-element" id="cases-deaths">
@@ -144,17 +158,22 @@ const CovidForm = () => {
           type="radio"
           id="cases"
           name="indicator"
-          value={radioState}
-          onChange={handleRadioButton}
-          checked
+          value="Cases"
+          onChange={(event) => {
+            setIndicator(event.target.value);
+          }}
+          checked={indicator === "Cases"}
         />
         <label htmlFor="deaths">Deaths</label>
         <input
           type="radio"
           id="deaths"
           name="indicator"
-          value={radioState}
-          onChange={handleRadioButton}
+          value="Deaths"
+          onChange={(event) => {
+            setIndicator(event.target.value);
+          }}
+          checked={indicator === "Deaths"}
         />
       </div>
       <div className="form-element" id="country-search">
@@ -166,11 +185,15 @@ const CovidForm = () => {
           onChange={searchByCountry}
         />
       </div>
-      <button id="show-list" type="submit" className="form-element">
+      <button
+        id="show-list"
+        type="button"
+        className="form-element"
+        onClick={processData}
+      >
         Show list
       </button>
-      {/* Button onClick={showList} */}
-    </div>
+    </form>
   );
 };
 export default CovidForm;
