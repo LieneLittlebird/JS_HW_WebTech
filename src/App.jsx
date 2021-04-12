@@ -1,3 +1,6 @@
+/*
+Name, LastName = Liene Putniņa
+Student ID = lr12022 */
 /* eslint-disable react/react-in-jsx-scope */
 /* eslint-disable import/extensions */
 /* eslint-disable no-unused-vars */

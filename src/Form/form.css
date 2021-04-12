@@ -5,3 +5,11 @@
 label {
   margin-right: 5px;
 }
+
+input #week-from {
+  width: 100px;
+}
+
+input #week-till {
+  width: 100px;
+}

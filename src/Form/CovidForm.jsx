@@ -1,3 +1,6 @@
+/*
+Name, LastName = Liene Putniņa
+Student ID = lr12022 */
 /* eslint-disable react/react-in-jsx-scope */
 /* eslint-disable no-unused-vars */
 /* eslint-disable react/prop-types */
@@ -23,16 +26,19 @@ const CovidForm = ({
   const [weekTill, setWeekTill] = useState("");
   const [indicator, setIndicator] = useState(casesOrDeaths);
   const [countrySearch, setCountrySearch] = useState("");
-  
+
+  const [showYearFromErrorLabel, setShowYearErrorLabel] = useState(false);
+  const [showYearTillErrorLabel, setShowYearTillErrorLabel] = useState(false);
+  const [showWeekFromErrorLabel, setShowWeekFromErrorLabel] = useState(false);
+  const [showWeekTillErrorLabel, setShowWeekTillErrorLabel] = useState(false);
 
   const processData = () => {
     let filteredData = originalData;
 
-    // console.log(filteredData.filter(
-    //   (item) => item.year_week.slice(-1)))
-
     if (continent !== "All") {
-      filteredData = filteredData.filter((item) => item.continent === continent);
+      filteredData = filteredData.filter(
+        (item) => item.continent === continent
+      );
     }
 
     if (country !== "All") {
@@ -41,23 +47,27 @@ const CovidForm = ({
 
     if (yearFrom) {
       filteredData = filteredData.filter(
-        (item) => parseInt(item.year_week.slice(0, 4), 10) >= parseInt(yearFrom, 10)
+        (item) =>
+          parseInt(item.year_week.slice(0, 4), 10) >= parseInt(yearFrom, 10)
       );
     }
 
     if (yearTill) {
       filteredData = filteredData.filter(
-        (item) => parseInt(item.year_week.slice(0, 4), 10) <= parseInt(yearTill, 10)
+        (item) =>
+          parseInt(item.year_week.slice(0, 4), 10) <= parseInt(yearTill, 10)
       );
     }
     if (weekFrom) {
       filteredData = filteredData.filter(
-        (item) => parseInt(item.year_week.slice(-2), 10) >= parseInt(weekFrom, 10)
+        (item) =>
+          parseInt(item.year_week.slice(-2), 10) >= parseInt(weekFrom, 10)
       );
     }
     if (weekTill) {
       filteredData = filteredData.filter(
-        (item) => parseInt(item.year_week.slice(-2), 10) <= parseInt(weekTill, 10)
+        (item) =>
+          parseInt(item.year_week.slice(-2), 10) <= parseInt(weekTill, 10)
       );
     }
 
@@ -72,16 +82,15 @@ const CovidForm = ({
   let continentOptions = [];
   let countryOptions = [];
 
-  useEffect(()=> {
+  useEffect(() => {
     continentOptions = originalData
       .map((x) => x.continent)
       .filter((v, i, x) => x.indexOf(v) === i);
-  
+
     countryOptions = originalData
       .map((x) => x.country)
       .filter((v, i, x) => x.indexOf(v) === i);
-  }, [originalData])
-
+  }, [originalData]);
 
   return (
     <form id="form">
@@ -127,9 +136,18 @@ const CovidForm = ({
           placeholder="YYYY"
           value={yearFrom}
           onChange={(event) => {
+            if (event.target.value === "2020" || event.target.value === "2021")
+              setShowYearErrorLabel(false);
+            else setShowYearErrorLabel(true);
             setYearFrom(event.target.value);
           }}
+          min={2020}
+          max={2021}
+          required
         />
+        {showYearFromErrorLabel && (
+          <label>Wrong input. Enter a number from 2020 till 2021</label>
+        )}
       </div>
       <div className="form-element" id="year-till">
         <label htmlFor="year-till">Year till:</label>
@@ -139,9 +157,18 @@ const CovidForm = ({
           placeholder="YYYY"
           value={yearTill}
           onChange={(event) => {
+            if (event.target.value !== "2020" || event.target.value !== "2021")
+              setShowYearTillErrorLabel(true);
+            else setShowYearTillErrorLabel(false);
             setYearTill(event.target.value);
           }}
+          min={2020}
+          max={2021}
+          required
         />
+        {showYearTillErrorLabel && (
+          <label>Wrong input. Enter a number between from 2020 till 2021</label>
+        )}
       </div>
       <div className="form-element" id="week-from">
         <label htmlFor="week-from">Week from:</label>
@@ -151,9 +178,18 @@ const CovidForm = ({
           placeholder="Week number"
           value={weekFrom}
           onChange={(event) => {
+            if (event.target.value >= 1 && event.target.value <= 52)
+              setShowWeekFromErrorLabel(false);
+            else setShowWeekFromErrorLabel(true);
             setWeekFrom(event.target.value);
           }}
+          min={1}
+          max={52}
+          required
         />
+        {showWeekFromErrorLabel && (
+          <label>Wrong input. Enter a number between 1 and 52</label>
+        )}
       </div>
       <div className="form-element" id="week-till">
         <label htmlFor="week-till">Week till:</label>
@@ -163,9 +199,18 @@ const CovidForm = ({
           placeholder="Week number"
           value={weekTill}
           onChange={(event) => {
+            if (event.target.value >= 1 && event.target.value <= 52)
+              setShowWeekTillErrorLabel(false);
+            else setShowWeekTillErrorLabel(true);
             setWeekTill(event.target.value);
           }}
+          min={1}
+          max={52}
+          required
         />
+        {showWeekTillErrorLabel && (
+          <label>Wrong input. Enter a number between 1 and 52</label>
+        )}
       </div>
       <div className="form-element" id="cases-deaths">
         <label htmlFor="cases">Cases</label>
@@ -207,6 +252,8 @@ const CovidForm = ({
         type="button"
         className="form-element"
         onClick={processData}
+        disabled={showYearFromErrorLabel}
+        // disabled={showYearErrorLabel || contintError || dfgfgh}
       >
         Show list
       </button>
