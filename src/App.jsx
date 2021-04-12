@@ -30,7 +30,3 @@ const App = () => {
 
 export default App;
 
-/*
-setFilteredData={setFilteredData} 
- filteredData={filteredData} 
-*/

@@ -5,9 +5,7 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 /* eslint-disable jsx-a11y/label-has-associated-control */
 
-// handle button cliks
-// setFilteredData(data.filter.magic)
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import "./form.css";
 
@@ -24,14 +22,18 @@ const CovidForm = ({
   const [weekFrom, setWeekFrom] = useState("");
   const [weekTill, setWeekTill] = useState("");
   const [indicator, setIndicator] = useState(casesOrDeaths);
-
   const [countrySearch, setCountrySearch] = useState("");
-  const searchByCountry = (event) => {
-    setCountrySearch(event.target.value);
-  };
+  
 
   const processData = () => {
     let filteredData = originalData;
+
+    // console.log(filteredData.filter(
+    //   (item) => item.year_week.slice(-1)))
+
+    if (continent !== "All") {
+      filteredData = filteredData.filter((item) => item.continent === continent);
+    }
 
     if (country !== "All") {
       filteredData = filteredData.filter((item) => item.country === country);
@@ -39,26 +41,23 @@ const CovidForm = ({
 
     if (yearFrom) {
       filteredData = filteredData.filter(
-        (item) => item.year_week.slice(0, 4) >= yearFrom
+        (item) => parseInt(item.year_week.slice(0, 4), 10) >= parseInt(yearFrom, 10)
       );
     }
 
-    // year till check the >= condition
     if (yearTill) {
       filteredData = filteredData.filter(
-        (item) => item.year_week.slice(0, 4) >= yearTill
+        (item) => parseInt(item.year_week.slice(0, 4), 10) <= parseInt(yearTill, 10)
       );
     }
-    // week from - check the >= condition
     if (weekFrom) {
       filteredData = filteredData.filter(
-        (item) => item.year_week.slice(-1) >= weekFrom
+        (item) => parseInt(item.year_week.slice(-2), 10) >= parseInt(weekFrom, 10)
       );
     }
-    // week till check the >= condition
     if (weekTill) {
       filteredData = filteredData.filter(
-        (item) => item.year_week.slice(-1) >= weekTill
+        (item) => parseInt(item.year_week.slice(-2), 10) <= parseInt(weekTill, 10)
       );
     }
 
@@ -70,13 +69,19 @@ const CovidForm = ({
     setData(filteredData);
   };
 
-  const continentOptions = originalData
-    .map((x) => x.continent)
-    .filter((v, i, x) => x.indexOf(v) === i);
+  let continentOptions = [];
+  let countryOptions = [];
 
-  const countryOptions = originalData
-    .map((x) => x.country)
-    .filter((v, i, x) => x.indexOf(v) === i);
+  useEffect(()=> {
+    continentOptions = originalData
+      .map((x) => x.continent)
+      .filter((v, i, x) => x.indexOf(v) === i);
+  
+    countryOptions = originalData
+      .map((x) => x.country)
+      .filter((v, i, x) => x.indexOf(v) === i);
+  }, [originalData])
+
 
   return (
     <form id="form">
@@ -117,7 +122,7 @@ const CovidForm = ({
       <div className="form-element" id="year-from">
         <label htmlFor="year-from">Year from:</label>
         <input
-          type="text"
+          type="number"
           id="year-from"
           placeholder="YYYY"
           value={yearFrom}
@@ -129,7 +134,7 @@ const CovidForm = ({
       <div className="form-element" id="year-till">
         <label htmlFor="year-till">Year till:</label>
         <input
-          type="text"
+          type="number"
           id="year-till"
           placeholder="YYYY"
           value={yearTill}
@@ -141,7 +146,7 @@ const CovidForm = ({
       <div className="form-element" id="week-from">
         <label htmlFor="week-from">Week from:</label>
         <input
-          type="text"
+          type="number"
           id="week-from"
           placeholder="Week number"
           value={weekFrom}
@@ -153,7 +158,7 @@ const CovidForm = ({
       <div className="form-element" id="week-till">
         <label htmlFor="week-till">Week till:</label>
         <input
-          type="text"
+          type="number"
           id="week-till"
           placeholder="Week number"
           value={weekTill}
@@ -192,7 +197,9 @@ const CovidForm = ({
           type="search"
           id="search"
           value={countrySearch}
-          onChange={searchByCountry}
+          onChange={(event) => {
+            setCountrySearch(event.target.value);
+          }}
         />
       </div>
       <button
