@@ -18,6 +18,9 @@ const CovidForm = ({
   casesOrDeaths,
   setCasesOrDeaths,
 }) => {
+  const [continentOptions, setContinentOptions] = useState([]);
+  const [countryOptions, setCountryOptions] = useState([]);
+
   const [continent, setContinent] = useState("All");
   const [country, setCountry] = useState("All");
   const [yearFrom, setYearFrom] = useState("");
@@ -79,17 +82,16 @@ const CovidForm = ({
     setData(filteredData);
   };
 
-  let continentOptions = [];
-  let countryOptions = [];
-
   useEffect(() => {
-    continentOptions = originalData
-      .map((x) => x.continent)
-      .filter((v, i, x) => x.indexOf(v) === i);
+    setContinentOptions(
+      originalData
+        .map((x) => x.continent)
+        .filter((v, i, x) => x.indexOf(v) === i)
+    );
 
-    countryOptions = originalData
-      .map((x) => x.country)
-      .filter((v, i, x) => x.indexOf(v) === i);
+    setCountryOptions(
+      originalData.map((x) => x.country).filter((v, i, x) => x.indexOf(v) === i)
+    );
   }, [originalData]);
 
   return (
