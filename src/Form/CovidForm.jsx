@@ -136,18 +136,25 @@ const CovidForm = ({
           placeholder="YYYY"
           value={yearFrom}
           onChange={(event) => {
-            if (event.target.value === "2020" || event.target.value === "2021")
+            if (event.target.value >= 2020 && event.target.value <= 2021) {
               setShowYearErrorLabel(false);
-            else setShowYearErrorLabel(true);
+            } else {
+              setShowYearErrorLabel(
+                "Wrong input. Enter a number between 2020 till 2021"
+              );
+            }
+
+            if (!weekFrom) {
+              setShowWeekFromErrorLabel("Enter a week");
+            }
+
             setYearFrom(event.target.value);
           }}
           min={2020}
           max={2021}
           required
         />
-        {showYearFromErrorLabel && (
-          <label>Wrong input. Enter a number from 2020 till 2021</label>
-        )}
+        {showYearFromErrorLabel && <label>{showYearFromErrorLabel}</label>}
       </div>
       <div className="form-element" id="year-till">
         <label htmlFor="year-till">Year till:</label>
@@ -178,18 +185,25 @@ const CovidForm = ({
           placeholder="Week number"
           value={weekFrom}
           onChange={(event) => {
-            if (event.target.value >= 1 && event.target.value <= 52)
-              setShowWeekFromErrorLabel(false);
-            else setShowWeekFromErrorLabel(true);
+            if (event.target.value >= 1 && event.target.value <= 52) {
+              setShowWeekFromErrorLabel("");
+            } else {
+              setShowWeekFromErrorLabel(
+                "Wrong input. Enter a number between 1 and 52"
+              );
+            }
+
+            if (!yearFrom) {
+              setShowYearErrorLabel("Enter a year");
+            }
+
             setWeekFrom(event.target.value);
           }}
           min={1}
           max={52}
           required
         />
-        {showWeekFromErrorLabel && (
-          <label>Wrong input. Enter a number between 1 and 52</label>
-        )}
+        {showWeekFromErrorLabel && <label>{showWeekFromErrorLabel}</label>}
       </div>
       <div className="form-element" id="week-till">
         <label htmlFor="week-till">Week till:</label>
@@ -252,8 +266,12 @@ const CovidForm = ({
         type="button"
         className="form-element"
         onClick={processData}
-        disabled={showYearFromErrorLabel}
-        // disabled={showYearErrorLabel || contintError || dfgfgh}
+        disabled={
+          showYearFromErrorLabel ||
+          showYearTillErrorLabel ||
+          showWeekFromErrorLabel ||
+          showWeekTillErrorLabel
+        }
       >
         Show list
       </button>
