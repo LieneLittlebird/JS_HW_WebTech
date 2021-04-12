@@ -20,13 +20,7 @@ const Table = ({ data, casesOrDeaths }) => (
     </thead>
     <tbody>
       {data.map((object, index) => {
-        const {
-          country,
-          population,
-          year_week,
-          weekly_count,
-          cumulative_count,
-        } = object;
+        const { country, population, year_week, cumulative_count } = object;
         const week = year_week.slice(-1);
 
         return (
@@ -35,7 +29,6 @@ const Table = ({ data, casesOrDeaths }) => (
             <td>{population}</td>
             <td>{week}</td>
             <td>{year_week}</td>
-            <td>{weekly_count}</td>
             <td>{cumulative_count}</td>
           </tr>
         );
