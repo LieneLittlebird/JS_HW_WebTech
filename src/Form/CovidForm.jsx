@@ -167,7 +167,6 @@ const CovidForm = ({
               setShowWeekFromErrorLabel("Enter a week number");
             }
 
-            // Here
             if (event.target.value && yearTill) {
               setShowWeekFromErrorLabel(false);
             }
@@ -239,10 +238,10 @@ const CovidForm = ({
               );
             }
 
-            if (parseInt(!yearFrom, 10)) {
+            if (!yearFrom) {
               setShowYearFromErrorLabel("Enter a year");
             }
-            // Here
+
             if (yearFrom && yearTill) {
               setShowWeekFromErrorLabel(false);
             }
@@ -271,13 +270,18 @@ const CovidForm = ({
                   "Week from must be smaller than or equal to week till"
                 );
               }
-              // Here
+
               if (parseInt(yearFrom, 10) && parseInt(yearTill, 10)) {
                 setShowWeekFromErrorLabel(false);
               }
 
               setShowWeekTillErrorLabel(false);
             } else setShowWeekTillErrorLabel(true);
+
+            if (!yearTill) {
+              setShowYearTillErrorLabel(true);
+            }
+
             setWeekTill(event.target.value);
           }}
           min={1}
