@@ -1,8 +1,10 @@
+/* eslint-disable react/react-in-jsx-scope */
+/* Name, LastName = Liene Putniņa
+Student ID = lr12022 */
+
 /* eslint-disable import/no-named-as-default-member */
 /* eslint-disable import/no-named-as-default */
 /*
-Name, LastName = Liene Putniņa
-Student ID = lr12022 */
 /* eslint-disable react/react-in-jsx-scope */
 /* eslint-disable import/extensions */
 /* eslint-disable no-unused-vars */

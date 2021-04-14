@@ -35,7 +35,7 @@ const CovidForm = ({
   const [showWeekFromErrorLabel, setShowWeekFromErrorLabel] = useState(false);
   const [showWeekTillErrorLabel, setShowWeekTillErrorLabel] = useState(false);
 
-  const processData = () => {
+  const processData = (countrySearchInput) => {
     let filteredData = originalData;
 
     if (continent !== "All") {
@@ -61,16 +61,24 @@ const CovidForm = ({
           parseInt(item.year_week.slice(0, 4), 10) <= parseInt(yearTill, 10)
       );
     }
+
     if (weekFrom) {
       filteredData = filteredData.filter(
         (item) =>
           parseInt(item.year_week.slice(-2), 10) >= parseInt(weekFrom, 10)
       );
     }
+
     if (weekTill) {
       filteredData = filteredData.filter(
         (item) =>
           parseInt(item.year_week.slice(-2), 10) <= parseInt(weekTill, 10)
+      );
+    }
+
+    if (countrySearchInput?.length > 1) {
+      filteredData = filteredData.filter((item) =>
+        item.country.toLowerCase().includes(countrySearchInput.toLowerCase())
       );
     }
 
@@ -95,7 +103,7 @@ const CovidForm = ({
   }, [originalData]);
 
   return (
-    <form id="form">
+    <form id="form" autoComplete="off">
       <div className="form-element" id="continent">
         <label htmlFor="continent-select">Continent:</label>
         <select
@@ -159,6 +167,11 @@ const CovidForm = ({
               setShowWeekFromErrorLabel("Enter a week number");
             }
 
+            // Here
+            if (event.target.value && yearTill) {
+              setShowWeekFromErrorLabel(false);
+            }
+
             setYearFrom(event.target.value);
           }}
           min={2020}
@@ -187,6 +200,11 @@ const CovidForm = ({
                 );
               }
             } else setShowYearTillErrorLabel(false);
+
+            if (event.target.value && yearFrom) {
+              setShowWeekFromErrorLabel(false);
+            }
+
             setYearTill(event.target.value);
           }}
           min={2020}
@@ -213,11 +231,7 @@ const CovidForm = ({
                   "Week from must be smaller than or equal to week till"
                 );
               }
-              if (parseInt(yearFrom, 10) && parseInt(yearTill, 10)) {
-                setShowWeekFromErrorLabel(false);
-              } else {
-                setShowWeekFromErrorLabel(true);
-              }
+
               setShowWeekFromErrorLabel(false);
             } else {
               setShowWeekFromErrorLabel(
@@ -228,9 +242,9 @@ const CovidForm = ({
             if (parseInt(!yearFrom, 10)) {
               setShowYearFromErrorLabel("Enter a year");
             }
-
-            if (parseInt(yearFrom, 10) && parseInt(yearTill, 10)) {
-              setShowWeekFromErrorLabel("");
+            // Here
+            if (yearFrom && yearTill) {
+              setShowWeekFromErrorLabel(false);
             }
 
             setWeekFrom(event.target.value);
@@ -257,9 +271,11 @@ const CovidForm = ({
                   "Week from must be smaller than or equal to week till"
                 );
               }
+              // Here
               if (parseInt(yearFrom, 10) && parseInt(yearTill, 10)) {
                 setShowWeekFromErrorLabel(false);
               }
+
               setShowWeekTillErrorLabel(false);
             } else setShowWeekTillErrorLabel(true);
             setWeekTill(event.target.value);
@@ -304,6 +320,12 @@ const CovidForm = ({
           value={countrySearch}
           onChange={(event) => {
             setCountrySearch(event.target.value);
+
+            if (event.target.value?.length > 1) {
+              processData(event.target.value);
+            } else {
+              processData("");
+            }
           }}
         />
       </div>
@@ -311,7 +333,7 @@ const CovidForm = ({
         id="show-list"
         type="button"
         className="form-element"
-        onClick={processData}
+        onClick={() => processData(countrySearch)}
         disabled={
           showYearFromErrorLabel ||
           showYearTillErrorLabel ||
