@@ -1,7 +1,8 @@
-/* eslint-disable import/no-unresolved */
 /*
 Name, LastName = Liene Putniņa
 Student ID = lr12022 */
+
+/* eslint-disable import/no-unresolved */
 /* eslint-disable camelcase */
 /* eslint-disable react/prop-types */
 import React from "react";
