@@ -79,6 +79,12 @@ const CovidForm = ({
       (item) => item.indicator === indicator.toLowerCase()
     );
 
+    // if (countrySearch.length >= 2) {
+    //   filteredData = filteredData.filter(
+    //     (item) => item.country === countrySearch
+    //   );
+    // }
+
     setData(filteredData);
   };
 
@@ -93,6 +99,15 @@ const CovidForm = ({
       originalData.map((x) => x.country).filter((v, i, x) => x.indexOf(v) === i)
     );
   }, [originalData]);
+
+  const findCountry = () => {
+    let filteredData = originalData;
+    if (countrySearch.length >= 2) {
+      filteredData = filteredData.filter(
+        (item) => item.country === countrySearch
+      );
+    }
+  };
 
   return (
     <form id="form">
@@ -138,16 +153,25 @@ const CovidForm = ({
           placeholder="YYYY"
           value={yearFrom}
           onChange={(event) => {
-            if (event.target.value >= 2020 && event.target.value <= 2021) {
-              setShowYearErrorLabel(false);
+            if (
+              parseInt(event.target.value, 10) >= 2020 &&
+              parseInt(event.target.value, 10) <= 2021
+            ) {
+              if (parseInt(event.target.value, 10) <= parseInt(yearTill, 10)) {
+                setShowYearErrorLabel(false);
+              } else {
+                setShowYearErrorLabel(
+                  "Year from must be smaller than or equal to year till"
+                );
+              }
             } else {
               setShowYearErrorLabel(
-                "Wrong input. Enter a number between 2020 till 2021"
+                "Wrong input. Enter a number between 2020 and 2021"
               );
             }
 
             if (!weekFrom) {
-              setShowWeekFromErrorLabel("Enter a week");
+              setShowWeekFromErrorLabel("Enter a week number");
             }
 
             setYearFrom(event.target.value);
@@ -166,9 +190,18 @@ const CovidForm = ({
           placeholder="YYYY"
           value={yearTill}
           onChange={(event) => {
-            if (event.target.value !== "2020" || event.target.value !== "2021")
-              setShowYearTillErrorLabel(true);
-            else setShowYearTillErrorLabel(false);
+            if (
+              parseInt(event.target.value, 10) >= 2020 &&
+              parseInt(event.target.value, 10) <= 2021
+            ) {
+              if (parseInt(event.target.value, 10) >= parseInt(yearFrom, 10)) {
+                setShowYearErrorLabel(false);
+              } else {
+                setShowYearErrorLabel(
+                  "Year from must be smaller than or equal to year till"
+                );
+              }
+            } else setShowYearTillErrorLabel(false);
             setYearTill(event.target.value);
           }}
           min={2020}
@@ -176,7 +209,7 @@ const CovidForm = ({
           required
         />
         {showYearTillErrorLabel && (
-          <label>Wrong input. Enter a number between from 2020 till 2021</label>
+          <label>Wrong input. Enter a number between 2020 and 2021</label>
         )}
       </div>
       <div className="form-element" id="week-from">
@@ -195,8 +228,12 @@ const CovidForm = ({
               );
             }
 
-            if (!yearFrom) {
+            if (parseInt(!yearFrom, 10)) {
               setShowYearErrorLabel("Enter a year");
+            }
+
+            if (parseInt(yearFrom, 10) && parseInt(yearTill, 10)) {
+              setShowWeekFromErrorLabel("");
             }
 
             setWeekFrom(event.target.value);
@@ -219,6 +256,10 @@ const CovidForm = ({
               setShowWeekTillErrorLabel(false);
             else setShowWeekTillErrorLabel(true);
             setWeekTill(event.target.value);
+
+            if (parseInt(yearFrom, 10) && parseInt(yearTill, 10)) {
+              setShowWeekTillErrorLabel(false);
+            }
           }}
           min={1}
           max={52}
